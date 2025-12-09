@@ -1,0 +1,21 @@
+crds:
+  enabled: true
+
+image:
+  repository: europe-west4-docker.pkg.dev/xebia-k8s-training-1/xebia-k8s-training-1-quay/jetstack/cert-manager-controller
+
+webhook:
+  image:
+    repository: europe-west4-docker.pkg.dev/xebia-k8s-training-1/xebia-k8s-training-1-quay/jetstack/cert-manager-webhook
+
+cainjector:
+  image:
+    repository: europe-west4-docker.pkg.dev/xebia-k8s-training-1/xebia-k8s-training-1-quay/jetstack/cert-manager-cainjector
+
+acmesolver:
+  image:
+    repository: europe-west4-docker.pkg.dev/xebia-k8s-training-1/xebia-k8s-training-1-quay/jetstack/cert-manager-acmesolver
+
+startupapicheck:
+  image:
+    repository: europe-west4-docker.pkg.dev/xebia-k8s-training-1/xebia-k8s-training-1-quay/jetstack/cert-manager-startupapicheck
