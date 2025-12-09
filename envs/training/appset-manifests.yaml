@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-manifests
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: [ "missingkey=error" ]
+  generators:
+    - git:
+        repoURL: "https://github.com/mmourick/gitops-base.git"
+        revision: main
+        directories:
+          - path: "envs/training/*"
+  template:
+    metadata:
+      name: '{{ .path.basename }}-manifests'
+    spec:
+      project: "platform"
+      source:
+        repoURL: "https://github.com/mmourick/gitops-base.git"
+        targetRevision: main
+        path: 'envs/training/{{ .path.basename }}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ .path.basename }}'
+      syncPolicy:
+        automated:
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
