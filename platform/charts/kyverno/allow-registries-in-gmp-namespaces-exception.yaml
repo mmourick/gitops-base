@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: allow-registries-in-gmp-namespaces
+spec:
+  exceptions:
+    - policyName: restrict-image-registries
+      ruleNames:
+        - validate-registries
+        - autogen-validate-registries
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Deployment
+            - StatefulSet
+            - DaemonSet
+          namespaces:
+            - gmp-system
