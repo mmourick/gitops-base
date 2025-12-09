@@ -11,11 +11,11 @@ spec:
         generators:
           - list:
               elements:
-                - gitopsRepo: git@github.com:mmourick/gitops-base.git
+                - gitopsRepo: "https://github.com/mmourick/gitops-base.git"
                   region: europe-west4
                   clusterName: training
           - git:
-              repoURL: git@github.com:mmourick/gitops-base.git
+              repoURL: "https://github.com/mmourick/gitops-base.git"
               revision: main
               files:
                 - path: platform/charts/**/config.yaml
