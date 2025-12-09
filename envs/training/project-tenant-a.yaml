@@ -7,10 +7,8 @@ metadata:
     argocd.argoproj.io/sync-wave: "-5"
 spec:
   namespaceResourceWhitelist:
-    - group: 'apps'
-      kind: 'Deployment'
     - group: '*'
-      kind: 'Service'
+      kind: '*'
   clusterResourceWhitelist:
     - group: '*'
       kind: 'Namespace'
