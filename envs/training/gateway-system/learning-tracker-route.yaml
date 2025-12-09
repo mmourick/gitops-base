@@ -15,4 +15,5 @@ spec:
         type: PathPrefix
     backendRefs:
     - name: learning-tracker-frontend
+      namespace: tenant-a-learning-tracker
       port: 80
