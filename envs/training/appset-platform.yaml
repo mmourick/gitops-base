@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-helm
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: [ "missingkey=error" ]
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - gitopsRepo: git@github.com:mmourick/gitops-base.git
+                  region: europe-west4
+                  clusterName: training
+          - git:
+              repoURL: git@github.com:mmourick/gitops-base.git
+              revision: main
+              files:
+                - path: platform/charts/**/config.yaml
+  template:
+    metadata:
+      name: '{{ .path.basename}}-{{ .region-chart}}-chart'
+      labels:
+        tsc-labs.at/generated-by: "platform-helm"
+        tsc-labs.at/cluster: ' {{ .clusterName }}'
+        tsc-labs.at/region: ' {{ .region }}'
+    spec:
+      project: "platform"
+      sources:
+        - repoURL: '{{ .repoURL }}'
+          targetRevision: '.targetRevision'
+          chart: '{{ .chart }}'
+          helm:
+            releaseName: '{{ .chart }}'
+            valueFiles:
+              - $values/platform/charts/.path.basename/values.yaml
+              - $values/platform/charts/.path.basename/.clusterName/values.yaml
+            ignoreMissingValueFiles: true
+        - repoURL: '{{ .gitopsRepo }}'
+          targetRevision: main
+          path: platform/charts/.path.basename
+        - repoURL: '{{ .gitopsRepo }}'
+          targetRevision: main
+          ref: values
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ .namespace }}'
+      syncPolicy:
+        automated:
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
