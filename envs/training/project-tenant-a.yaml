@@ -16,6 +16,6 @@ spec:
       kind: 'Namespace'
   destinations:
     - namespace: 'tenant-a-*'
-      server: 'kubernetes.default.svc'
+      server: 'https://kubernetes.default.svc'
   sourceRepos:
     - '*'
