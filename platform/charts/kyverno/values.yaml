@@ -1,0 +1,8 @@
+global:
+  image:
+    registry: europe-west4-docker.pkg.dev/xebia-k8s-training-1/ghcr
+
+features:
+  policyExceptions:
+    enabled: true
+    namespace: kyverno
