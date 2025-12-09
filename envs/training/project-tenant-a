@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: tenant-a
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  namespaceResourceWhitelist:
+    - group: 'apps'
+      kind: 'Deployment'
+    - group: '*'
+      kind: 'Service'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: 'Namespace'
+  destinations:
+    - namespace: 'tenant-a-*'
+      server: 'kubernetes.default.svc'
+  sourceRepos:
+    - '*'
