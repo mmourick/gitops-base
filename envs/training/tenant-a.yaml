@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tenant-a
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/mmourick/gitops-tenant.git
+        revision: main
+        directories:
+          - path: "*"
+  template:
+    metadata:
+      name: 'tenant-a-{{ path.basename }}'
+    spec:
+      project: "tenant-a"
+      source:
+        repoURL: https://github.com/mmourick/gitops-tenant.git
+        targetRevision: HEAD
+        path: '{{ path }}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 'tenant-a-{{ path.basename }}'
+      syncPolicy:
+        automated:
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
